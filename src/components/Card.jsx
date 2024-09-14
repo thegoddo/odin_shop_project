@@ -1,4 +1,4 @@
-import useState from "react";
+import { useState } from "react";
 import PropTypes from "prop-types";
 import "../Styles/Card.css";
 
@@ -17,6 +17,8 @@ function Card({ image, title, description }) {
         <p className="card-description">{description}</p>
         <div className="quantity-controls">
           <button onClick={() => setQuantity(quantity + 1)}>+</button>
+          {/* <input type="number" value={quantity} width="30%" /> */}
+          <label className="quantity-label">{quantity}</label>
           <button
             onClick={() => setQuantity(quantity > 0 ? quantity - 1 : null)}
           >
