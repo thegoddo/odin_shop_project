@@ -1,0 +1,12 @@
+# TODOs and Fixes for this project.
+
+## TODO
+
+- Create a CSS file for search Bar.
+- Add an error page.
+- Create test files for project.
+- Create a Cart Page
+
+## FIXME
+
+- Fix Autosuggestion in search bar components.
