@@ -1,11 +1,27 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import PropTypes from "prop-types";
 import "../Styles/Card.css";
+import CartContext from "../utils/CartContext";
 
-function Card({ image, title, description }) {
+function Card({ id, image, title, description }) {
   const [quantity, setQuantity] = useState(0);
+  const [product, setProduct] = useState([{}]);
 
-  function addToCart(quantity) {
+  const { addToCart } = useContext(CartContext);
+
+  function handleAddToCart() {
+    setQuantity(quantity + 1);
+    setProduct((prevItems) => [
+      ...prevItems,
+      {
+        productId: id,
+        productImage: image,
+        productTitle: title,
+        productDescription: description,
+        productQuantity: quantity,
+      },
+    ]);
+    addToCart(product[product.length - 1]);
     console.log(`Adding ${quantity} to cart.`);
   }
 
@@ -24,7 +40,7 @@ function Card({ image, title, description }) {
           >
             -
           </button>
-          <button onClick={() => addToCart(quantity)}>Add to cart</button>
+          <button onClick={() => handleAddToCart()}>Add to Cart</button>
         </div>
       </div>
     </>
@@ -32,6 +48,7 @@ function Card({ image, title, description }) {
 }
 
 Card.propTypes = {
+  id: PropTypes.number.isRequired,
   image: PropTypes.string,
   title: PropTypes.string,
   description: PropTypes.string,

@@ -7,8 +7,29 @@ export const CartProvider = ({ children }) => {
   const [cartItems, setCartItems] = useState([]);
 
   const addToCart = (item) => {
-    setCartItems((prevItems) => [...prevItems, item]);
+    const existingItem = cartItems.find(
+      (cartItem) => cartItem.productId === item.productId
+    );
+
+    if (existingItem) {
+      // If the item exists, update its quantity
+      setCartItems((prevItems) =>
+        prevItems.map((cartItem) =>
+          cartItem.productId === existingItem.productId
+            ? {
+                ...cartItem,
+                productQuantity:
+                  cartItem.productQuantity + item.productQuantity,
+              }
+            : cartItem
+        )
+      );
+    } else {
+      // If the item doesn't exist, add it to the cart with the specified quantity
+      setCartItems((prevItems) => [...prevItems, item]);
+    }
   };
+  // setCartItems((prevItems) => [...prevItems, item]);
 
   const removeFromCart = (itemId) => {
     setCartItems((prevItems) => prevItems.filter((item) => item.id !== itemId));
