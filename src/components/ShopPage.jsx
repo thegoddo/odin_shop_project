@@ -28,6 +28,8 @@ export default function ShopPage() {
               image={shopItem.image}
               title={shopItem.title}
               description={shopItem.description}
+              price={shopItem.price}
+              quantity={shopItem.quantity}
             />
           ))
         )}

@@ -2,30 +2,33 @@ import CartContext from "../utils/CartContext";
 import { useContext } from "react";
 
 export default function Cart() {
-  const { cartItems } = useContext(CartContext);
+  const { cartItems, setCartItems } = useContext(CartContext);
+  console.log(cartItems);
 
-  const groupedItems = cartItems.reduce((acc, item) => {
-    const existingItem = acc.find(
-      (cartItem) => cartItem.productId === item.productId
-    );
-    if (existingItem) {
-      existingItem.productQuantity += item.productQuantity;
-    } else {
-      acc.push({ ...item });
-    }
-    return acc;
-  }, []);
+  const handleMinusButton = (id) => {
+    const quantity = cartItems.find((item) => item.id === id).quantity - 1;
+    setCartItems((currentItem) => {
+      if (quantity < 1) {
+        return currentItem.filter((item) => item.id !== id);
+      } else {
+        return currentItem.map((item) =>
+          item.id === id ? { ...item, quantity: item.quantity - 1 } : item
+        );
+      }
+    });
+  };
+
   return (
     <>
       {cartItems.length === 0 ? (
         <center>Oops! No Items to show.</center>
       ) : (
-        groupedItems.map((item) => (
-          <div key={item.productId}>
-            <img src={item.productImage} />
-            <h1>{item.productTitle}</h1>
-            <p>{item.productDescription}</p>
-            <p>{item.productQuantity}</p>
+        cartItems.map((item) => (
+          <div key={item.id}>
+            <img src={item.imgUrl} />
+            <h1>{item.title}</h1>
+            <p>{item.price}</p>
+            <p>{item.quantity}</p>
           </div>
         ))
       )}

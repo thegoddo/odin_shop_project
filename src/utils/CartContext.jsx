@@ -6,30 +6,32 @@ const CartContext = createContext();
 export const CartProvider = ({ children }) => {
   const [cartItems, setCartItems] = useState([]);
 
-  const addToCart = (item) => {
-    const existingItem = cartItems.find(
-      (cartItem) => cartItem.productId === item.productId
-    );
+  const addToCart = (product) => {
+    setCartItems((cartItem) => {
+      const itemExists = cartItem.find(
+        (item) => item.title === product.title
+      )?.title;
 
-    if (existingItem) {
-      // If the item exists, update its quantity
-      setCartItems((prevItems) =>
-        prevItems.map((cartItem) =>
-          cartItem.productId === existingItem.productId
-            ? {
-                ...cartItem,
-                productQuantity:
-                  cartItem.productQuantity + item.productQuantity,
-              }
-            : cartItem
-        )
-      );
-    } else {
-      // If the item doesn't exist, add it to the cart with the specified quantity
-      setCartItems((prevItems) => [...prevItems, item]);
-    }
+      if (itemExists) {
+        return cartItem.map((item) => {
+          item.title === product.title
+            ? { ...item, quantity: item.quantity + 1 }
+            : item;
+        });
+      } else {
+        return [
+          ...cartItem,
+          {
+            imgUrl: product.imgUrl,
+            title: product.title,
+            quantity: 1,
+            price: product.price,
+            id: crypto.randomUUID(),
+          },
+        ];
+      }
+    });
   };
-  // setCartItems((prevItems) => [...prevItems, item]);
 
   const removeFromCart = (itemId) => {
     setCartItems((prevItems) => prevItems.filter((item) => item.id !== itemId));
