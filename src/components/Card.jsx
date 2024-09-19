@@ -3,26 +3,24 @@ import PropTypes from "prop-types";
 import "../Styles/Card.css";
 import CartContext from "../utils/CartContext";
 
-function Card({ id, image, title, description }) {
-  const [quantity, setQuantity] = useState(0);
+function Card({ image, title, description, price, quantity }) {
+  // const [product, setProduct] = useState([{imgUrl: "",productTitle: "", productPrice:"", productQuantity: ""}]);
   const [product, setProduct] = useState([{}]);
 
   const { addToCart } = useContext(CartContext);
 
   function handleAddToCart() {
-    setQuantity(quantity + 1);
     setProduct((prevItems) => [
       ...prevItems,
       {
-        productId: id,
-        productImage: image,
-        productTitle: title,
-        productDescription: description,
-        productQuantity: quantity,
+        imgUrl: image,
+        title: title,
+        price: price,
+        quantity: quantity,
       },
     ]);
-    addToCart(product[product.length - 1]);
-    console.log(`Adding ${quantity} to cart.`);
+    // addToCart(product[product.length - 1]);
+    addToCart(product);
   }
 
   return (
@@ -32,14 +30,7 @@ function Card({ id, image, title, description }) {
         <h2 className="card-title">{title}</h2>
         <p className="card-description">{description}</p>
         <div className="quantity-controls">
-          <button onClick={() => setQuantity(quantity + 1)}>+</button>
-          {/* <input type="number" value={quantity} width="30%" /> */}
-          <label className="quantity-label">{quantity}</label>
-          <button
-            onClick={() => setQuantity(quantity > 0 ? quantity - 1 : null)}
-          >
-            -
-          </button>
+          <h2>{price}$</h2>
           <button onClick={() => handleAddToCart()}>Add to Cart</button>
         </div>
       </div>
@@ -52,6 +43,8 @@ Card.propTypes = {
   image: PropTypes.string,
   title: PropTypes.string,
   description: PropTypes.string,
+  price: PropTypes.number,
+  quantity: PropTypes.number,
 };
 
 export default Card;
